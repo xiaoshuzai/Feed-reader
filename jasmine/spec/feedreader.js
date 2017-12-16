@@ -43,8 +43,8 @@ $(function() {
 
     /* TODO: 写一个叫做 "The menu" 的测试用例 */
     describe('The menu',function(){
-      var body = document.getElementsByTagName('body')[0];
-      var icon = document.getElementsByClassName('menu-icon-link');
+      var body = $('body');
+      var icon = $('.menu-icon-link');
 
         /* TODO:
          * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
@@ -62,7 +62,7 @@ $(function() {
           it('菜单栏切换',function() {
           	// 设置点击事件
           	iconClick = function() {
-          		icon.onclick();
+          		icon.click();
           	};
           	// 第一次点击,body含有'menu-hidden' class 是否为假
           	iconClick();
@@ -72,7 +72,7 @@ $(function() {
           	expect(body.hasClass('menu-hidden')).toBeTruthy();
 
           });
-    )};
+    });
 
     /*储存超时时间，放在外边，方便下边 2 个测试用例均可使用*/
     var timeOut = jasmine.DEFAULT_TIMEOUT_INTERVAL;
@@ -94,7 +94,7 @@ $(function() {
          });
 
          it('loadFeed 函数被调用而且工作正常',function() {
-           var entrys = document.querySelectorALL('.feed, .entry');
+           var entrys = $('.feed .entry');
            // 返回的数据条数比0大，就说明成功
            expect(entrys.length).toBeGreaterThan(0);
          });
@@ -103,7 +103,7 @@ $(function() {
          afterEach(function() {
            jasmine.DEFAULT_TIMEOUT_INTERVAL = timeOut;
          });
-    )};
+    });
 
     /* TODO: 写一个叫做 "New Feed Selection" 的测试用例 */
     describe('New Feed Selection',function(){
@@ -111,17 +111,18 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+         var firstFeed , secondFeed = '';
          beforeEach(function(done){
      			// 设置超时时间
      			jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
      			// 初始化
      			loadFeed(0, function() {
      		 		// 取初始化时.feed中的内容
-     	        	firstFeed = document.getElementsByClassName('feed').innerHTML;
+     	        	firstFeed = $('.feed').html();
      	        	// 加载第二次
      		        loadFeed(1, function() {
      		        	// 取第二次.feed 中的内容
-     		        	secondFeed  = document.getElementsByClassName('feed').innerHTML;
+     		        	secondFeed  = $('.feed').html();
      		        	// cb 返回后done测试
      		        	done();
      		        });
@@ -130,12 +131,12 @@ $(function() {
 
         it('loadFeed 函数加载一个新源的时候内容会真的改变',function() {
     			// 第二次内容与第一次内容不等，即成功
-    			expect(feedTwo).not.toEqual(feedOne);
+    			expect(secondFeed).not.toEqual(firstFeed);
     		});
 
         	// 每个spec 后恢复默认，不影响其他功能
         	afterEach(function() {
                 jasmine.DEFAULT_TIMEOUT_INTERVAL = timeOut;
           });
-    )};
+    });
 }());
