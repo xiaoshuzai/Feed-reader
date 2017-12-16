@@ -32,9 +32,9 @@ $(function() {
          it('allFeeds',function() {
          	for(var i = 0; i < allFeeds.length; i++){
             expect(allFeeds[i].url).toBeDefined();
-            expect(allFeeds[i].url).not.toBeNull();
+            expect(allFeeds[i].url.length).not.toBe(0);
             expect(allFeeds[i].name).toBeDefined();
-            expect(allFeeds[i].name).not.toBeNull();
+            expect(allFeeds[i].name.length).not.toBe(0);
          	}
          });
 
@@ -43,16 +43,13 @@ $(function() {
 
     /* TODO: 写一个叫做 "The menu" 的测试用例 */
     describe('The menu',function(){
-      var body = $('body');
-      var icon = $('.menu-icon-link');
-
         /* TODO:
          * 写一个测试用例保证菜单元素默认是隐藏的。你需要分析 html 和 css
          * 来搞清楚我们是怎么实现隐藏/展示菜单元素的。
          */
          it('菜单元素默认是隐藏的',function() {
          	// body 有 'menu-hidden' 这个 class
-         	expect(body.hasClass('menu-hidden')).toBeTruthy();
+         	expect($('body').hasClass('menu-hidden')).toBe(true);
          });
          /* TODO:
           * 写一个测试用例保证当菜单图标被点击的时候菜单会切换可见状态。这个
@@ -60,16 +57,13 @@ $(function() {
           * 再次点击的时候是否隐藏。
           */
           it('菜单栏切换',function() {
-          	// 设置点击事件
-          	iconClick = function() {
-          		icon.click();
-          	};
-          	// 第一次点击,body含有'menu-hidden' class 是否为假
-          	iconClick();
-          	expect(body.hasClass('menu-hidden')).not.toBeTruthy();
+          	// 设置点击事件，第一次点击,body含有'menu-hidden' class 是否为假
+            $('.menu-icon-link').trigger('click');
+          	expect($('body').hasClass('menu-hidden')).toBe(false);
+
           	// 第二次点击,body含有'menu-hidden' class 是否为真
-          	iconClick();
-          	expect(body.hasClass('menu-hidden')).toBeTruthy();
+            $('.menu-icon-link').trigger('click');
+          	expect($('body').hasClass('menu-hidden')).toBe(true);
 
           });
     });
@@ -86,7 +80,6 @@ $(function() {
          * 记住 loadFeed() 函数是异步的所以这个应该使用 Jasmine 的 beforeEach
          * 和异步的 done() 函数。
          */
-
          beforeEach(function(done){
            // 设置超时时间
            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
@@ -94,9 +87,8 @@ $(function() {
          });
 
          it('loadFeed 函数被调用而且工作正常',function() {
-           var entrys = $('.feed .entry');
-           // 返回的数据条数比0大，就说明成功
-           expect(entrys.length).toBeGreaterThan(0);
+           // 返回的数据比0大，就说明成功
+           expect($('.feed .entry').length).toBeGreaterThan(0);
          });
 
          // 每个spec 后恢复默认，不影响其他功能
@@ -111,9 +103,11 @@ $(function() {
          * 写一个测试保证当用 loadFeed 函数加载一个新源的时候内容会真的改变。
          * 记住，loadFeed() 函数是异步的。
          */
+
+         /*在外边将两个变量初始化，以便使用*/
          var firstFeed , secondFeed = '';
          beforeEach(function(done){
-     			// 设置超时时间
+     			// 一样设置超时时间
      			jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
      			// 初始化
      			loadFeed(0, function() {
